@@ -7,71 +7,83 @@ picker.addEventListener("change", updateKeys, false);
 
 let keyboards = [];
 
-// Swedish layout from: https://github.com/simple-keyboard/simple-keyboard-layouts
-const main = new Keyboard('main', {
+let commonKeyboardOptions = {
     onChange: input => onChange(input),
-    onKeyPress: button => onKeyPress('main', button),
-    layout: {
-        default: [
-            "Esc F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12",
-            "\u00A7 1 2 3 4 5 6 7 8 9 0 + \u00B4 {bksp}",
-            "{tab} q w e r t y u i o p \u00E5 ¨",
-            "{lock} a s d f g h j k l \u00F6 \u00E4 ' {enter}",
-            "{lshift} < z x c v b n m , . - {rshift}",
-            "{lctrl} {lwin} {lalt} {space} {rctrl} {rwin} {rfn} {ralt}"
-        ]
-    },
+    theme: "simple-keyboard hg-theme-default hg-layout-default",
+    physicalKeyboardHighlight: true,
+    syncInstanceInputs: true,
     mergeDisplay: true,
-    display: {
-        '{lctrl}': 'ctrl',
-        '{lwin}': 'win',
-        '{lalt}': 'alt',
-        '{rctrl}': 'ctrl',
-        '{rwin}': 'win',
-        '{ralt}': 'alt',
-        '{rfn}': 'fn',
-        '{lshift}': 'shift',
-        '{rshift}': 'shift',
+    debug: true
+};
+
+const main = new Keyboard(".simple-keyboard-main", {
+    onKeyPress: button => onKeyPress('simpleKeyboardMain', button),
+    ...commonKeyboardOptions,
+    /**
+     * Layout based on:
+     * Sterling Butters (https://github.com/SterlingButters)
+     */
+    layout: {
+        default: [
+            "{escape} {f1} {f2} {f3} {f4} {f5} {f6} {f7} {f8} {f9} {f10} {f11} {f12}",
+            "\u00A7 1 2 3 4 5 6 7 8 9 0 + \u00B4 {backspace}",
+            "{tab} q w e r t y u i o p \u00E5 ¨",
+            "{capslock} a s d f g h j k l \u00F6 \u00E4 ' {enter}",
+            "{shiftleft} < z x c v b n m , . - {shiftright}",
+            "{controlleft} {winleft} {altleft} {space} {controlright} {winright} {fnright} {altright}"
+        ],
+        shift: [
+            "{escape} {f1} {f2} {f3} {f4} {f5} {f6} {f7} {f8} {f9} {f10} {f11} {f12}",
+            "~ ! @ # $ % ^ & * ( ) _ + {backspace}",
+            "{tab} Q W E R T Y U I O P { } |",
+            '{capslock} A S D F G H J K L : " {enter}',
+            "{shiftleft} Z X C V B N M < > ? {shiftright}",
+            "{controlleft} {altleft} {metaleft} {space} {metaright} {altright} {controlright}"
+        ]
     },
-    buttonTheme: [
-        {
-            class: "color1",
-            buttons: " "
-        }
-    ]
+    display: {
+        "{escape}": "esc",
+        "{tab}": "tab ⇥",
+        "{backspace}": "backspace ⌫",
+        "{enter}": "enter ↵",
+        "{capslock}": "caps lock ⇪",
+        "{shiftleft}": "shift ⇧",
+        "{shiftright}": "shift ⇧",
+        "{controlleft}": "ctrl",
+        "{controlright}": "ctrl",
+        "{altleft}": "alt",
+        "{altright}": "alt",
+        "{metaleft}": "cmd ⌘",
+        "{metaright}": "cmd ⌘",
+        "{winleft}": "win",
+        "{winright}": "win",
+        "{fnright}": "fn"
+    }
 });
+
+const control = new Keyboard(".simple-keyboard-control", {
+    onKeyPress: button => onKeyPress("simpleKeyboardControl", button),
+    ...commonKeyboardOptions,
+    layout: {
+        default: [
+            "{prtscr} {scrolllock} {pause}",
+            "{insert} {home} {pageup}",
+            "{delete} {end} {pagedown}"
+        ]
+    }
+});
+
+const arrows = new Keyboard(".simple-keyboard-arrows", {
+    onKeyPress: button => onKeyPress('simpleKeyboardArrows', button),
+    ...commonKeyboardOptions,
+    layout: {
+        default: ["{arrowup}", "{arrowleft} {arrowdown} {arrowright}"]
+    }
+});
+
 keyboards.push(main);
-
-const arrows = new Keyboard('arrows', {
-    onChange: input => onChange(input),
-    onKeyPress: button => onKeyPress('arrows', button),
-    layout: {
-        default: [
-            "{up}",
-            "{left} {down} {right}"
-        ]
-    },
-    display: {
-        '{up}': "^",
-        '{down}': "v",
-        '{left}': "<",
-        '{right}': ">"
-    }
-});
+keyboards.push(control);
 keyboards.push(arrows);
-
-const other = new Keyboard('other', {
-    onChange: input => onChange(input),
-    onKeyPress: button => onKeyPress('other', button),
-    layout: {
-        default: [
-            "PrintScr ScrLk Pause",
-            "Ins Home PgUp",
-            "Del End PgDn"
-        ]
-    }
-});
-keyboards.push(other);
 
 function onChange(input) {
     document.querySelector(".input").value = input;
