@@ -1,6 +1,10 @@
 import Keyboard from 'simple-keyboard';
 import 'simple-keyboard/build/css/index.css';
 
+const picker = document.querySelector("#colorpicker");
+picker.value = '#ffa500';
+picker.addEventListener("change", updateKeys, false);
+
 let keyboards = [];
 
 // Swedish layout from: https://github.com/simple-keyboard/simple-keyboard-layouts
@@ -32,6 +36,7 @@ const main = new Keyboard('main', {
     buttonTheme: [
         {
             class: "color1",
+            buttons: " "
         }
     ]
 });
@@ -74,12 +79,18 @@ function onChange(input) {
 }
 
 function onKeyPress(keyboard, button) {
-    console.log("Button pressed", button);
     swapColor(keyboard, button, 'color1');
 }
 
-function swapColor(keyboardName, button, className ) {
+function swapColor(keyboardName, button, className) {
     const keyboard = keyboards.find(k => k.currentInstanceName == keyboardName);
     const el = keyboard.getButtonElement(button);
     el.classList.toggle(className);
+}
+
+function updateKeys(event) {
+    document.querySelectorAll(".color1").forEach(p => {
+        p.style.background = event.target.value
+        p.style.color = "ffffff";
+    });
 }
