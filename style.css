@@ -1,7 +1,27 @@
 body {
     font-family: arial;
+    text-align: center;
 }
 
 #input-box {
     display: none;
+}
+
+.keyboard {
+    width: 800px;
+}
+
+.side {
+    width: 200px;
+}
+.main {
+    margin-bottom: 1em;
+}
+
+.arrows {
+    margin-bottom: 1em;
+}
+
+.other {
+    margin-bottom: 1em;
 }
