@@ -9,18 +9,29 @@ const main = new Keyboard('main', {
     onKeyPress: button => onKeyPress('main', button),
     layout: {
         default: [
-            "Esc F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12 PrintScr ScrLk Pause",
+            "Esc F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12",
             "\u00A7 1 2 3 4 5 6 7 8 9 0 + \u00B4 {bksp}",
             "{tab} q w e r t y u i o p \u00E5 ¨",
             "{lock} a s d f g h j k l \u00F6 \u00E4 ' {enter}",
-            "{shift} < z x c v b n m , . - {shift}",
-            "@ {space}"
+            "{lshift} < z x c v b n m , . - {rshift}",
+            "{lctrl} {lwin} {lalt} {space} {rctrl} {rwin} {rfn} {ralt}"
         ]
+    },
+    mergeDisplay: true,
+    display: {
+        '{lctrl}': 'ctrl',
+        '{lwin}': 'win',
+        '{lalt}': 'alt',
+        '{rctrl}': 'ctrl',
+        '{rwin}': 'win',
+        '{ralt}': 'alt',
+        '{rfn}': 'fn',
+        '{lshift}': 'shift',
+        '{rshift}': 'shift',
     },
     buttonTheme: [
         {
             class: "color1",
-            buttons: "Esc {tab} {lock} {shift}"
         }
     ]
 });
@@ -49,6 +60,7 @@ const other = new Keyboard('other', {
     onKeyPress: button => onKeyPress('other', button),
     layout: {
         default: [
+            "PrintScr ScrLk Pause",
             "Ins Home PgUp",
             "Del End PgDn"
         ]
