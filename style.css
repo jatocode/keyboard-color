@@ -1,10 +1,14 @@
 body {
     font-family: arial;
-    text-align: center;
 }
 
 #input-box {
     display: none;
+}
+
+.color1 {
+    background: orange !important;
+    color: white;
 }
 
 .keyboard {
