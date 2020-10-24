@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "simple-keyboard": "^2.32.15"
+    "keyboard": "0.0.1",
+    "simple-keyboard": "^2.32.15",
+    "src": "^1.1.2"
   }
 }
