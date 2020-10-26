@@ -24,6 +24,10 @@ body {
     border-radius: 2px;
 }
 
+.profiles {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
 #settings {
     margin-top: 2em;
 }

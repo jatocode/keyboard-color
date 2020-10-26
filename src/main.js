@@ -5,6 +5,7 @@ import './keyboard.css';
 
 //const defaultcolor = '#ffa500';
 const defaultcolor = '#ffa500';
+const clearcolor = 'white';
 let currentcolor = defaultcolor;
 
 let oldcolors = loadOldColors();
@@ -18,7 +19,16 @@ let keyboards = [];
 let profiles = loadProfiles();
 
 updateOldColors();
-updateProfiles();
+addProfilesToSelect();
+
+// Måste låta keyboard ladda
+setTimeout(() => changeProfile(profiles[0].value), 100);
+
+const clear = document.getElementById('clear');
+clear.onclick = () => { 
+    currentcolor = clearcolor;
+    updateKeys();
+};
 
 let commonKeyboardOptions = {
     onChange: input => onChange(input),
@@ -189,15 +199,23 @@ function getAllKeys() {
     return keycolors;
 }
 
-function changeProfile(event) {
-    const profile = profiles.find(p => p.value == event.target.value);
+function changeProfileEvent(event) {
+    changeProfile(event.target.value);
+}
+
+function changeProfile(name) {
+    const profile = profiles.find(p => p.value == name);
     let keycolors = [];
     profile.keycolors.forEach(k => {
         keycolors[k.key] = k.color;
     });
     const all = [...document.getElementsByClassName('hg-button')];
     all.forEach(b => {
-        b.style.backgroundColor = keycolors[b.dataset.skbtn];
+        if(keycolors.length == 0) {
+            b.style.backgroundColor = clearcolor;
+        } else {
+            b.style.backgroundColor = keycolors[b.dataset.skbtn] == '' ? clearcolor : keycolors[b.dataset.skbtn];
+        }
     })
 }
 
@@ -210,12 +228,23 @@ function saveProfile() {
     saveProfiles();
 }
 
-function updateProfiles() {
+function clearProfile() {
     const profileSelect = document.getElementById('profileselect');
-    const profileButton = document.getElementById('profilesave');
+    const profile = profiles.find(p => p.value == profileSelect.value);
+    profile.keycolors = [];
 
-    profileSelect.onchange = (event) => changeProfile(event);
-    profileButton.onclick = () => saveProfile();
+    changeProfile(profile.value);
+}
+
+
+function addProfilesToSelect() {
+    const profileSelect = document.getElementById('profileselect');
+    const profileSaveButton = document.getElementById('profilesave');
+    const profileClearButton = document.getElementById('profileclear');
+
+    profileSelect.onchange = (event) => changeProfileEvent(event);
+    profileSaveButton.onclick = () => saveProfile();
+    profileClearButton.onclick = () => clearProfile();
 
     profiles.forEach(p => {
         let option = document.createElement("option");
