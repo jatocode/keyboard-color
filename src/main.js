@@ -15,7 +15,10 @@ picker.addEventListener("change", colorChange, false);
 let selectedkeys = [];
 let keyboards = [];
 
+let profiles = loadProfiles();
+
 updateOldColors();
+updateProfiles();
 
 let commonKeyboardOptions = {
     onChange: input => onChange(input),
@@ -97,7 +100,7 @@ keyboards.push(arrows);
 
 function onChange(input) {
     document.querySelector(".input").value = input;
-    console.log("Input changed", input);
+   // console.log("Input changed", input);
 }
 
 function onKeyPress(keyboard, button) {
@@ -117,8 +120,8 @@ function selectKey(keyboardName, button) {
         el.style.border = 'dotted';
         el.style.borderWidth = '1px';
         el.style.borderColor = 'black';
-        el.style.color = 'red';
-        el.style.fontWeight = 'bold';
+    //    el.style.color = 'red';
+    //    el.style.fontWeight = 'bold';
     }
     el.classList.toggle('selected');
 }
@@ -147,7 +150,6 @@ function clearSelections() {
         p.style.color = 'black';
         p.style.fontWeight = 'normal';
         p.classList.remove('selected');             
-        console.log(selectedkeys);  
     })
 }
 
@@ -178,11 +180,78 @@ function updateOldColors() {
     });
 }
 
+function getAllKeys() {
+    const all = [...document.getElementsByClassName('hg-button')];
+    const keycolors = all.map(k => { 
+        return {key:k.dataset.skbtn, color:k.style.backgroundColor}
+    });
+
+    return keycolors;
+}
+
+function changeProfile(event) {
+    const profile = profiles.find(p => p.value == event.target.value);
+    let keycolors = [];
+    profile.keycolors.forEach(k => {
+        keycolors[k.key] = k.color;
+    });
+    const all = [...document.getElementsByClassName('hg-button')];
+    all.forEach(b => {
+        b.style.backgroundColor = keycolors[b.dataset.skbtn];
+    })
+}
+
+function saveProfile() {
+    const profileSelect = document.getElementById('profileselect');
+    const keycolors = getAllKeys();
+    const profile = profiles.find(p => p.value == profileSelect.value);
+    profile.keycolors = keycolors;
+
+    saveProfiles();
+}
+
+function updateProfiles() {
+    const profileSelect = document.getElementById('profileselect');
+    const profileButton = document.getElementById('profilesave');
+
+    profileSelect.onchange = (event) => changeProfile(event);
+    profileButton.onclick = () => saveProfile();
+
+    profiles.forEach(p => {
+        let option = document.createElement("option");
+        option.text = p.name;
+        option.value = p.value;
+        profileSelect.add(option);
+    });
+
+}
+
 function loadOldColors() {
-    let oldcols = localStorage.getItem('oldcolors').split(',');
+    let oldcols = localStorage.getItem('oldcolors')?.split(',');
+    if(oldcols == null) {
+        oldcols = [];
+    }
     return oldcols;
 }
 
 function saveOldColors() {
     localStorage.setItem('oldcolors', oldcolors);
+}
+
+function loadProfiles() {
+    let profiles = JSON.parse(localStorage.getItem('profiles'));
+    if(profiles == null) {
+        return [
+            {name:'Profile 1', value:'profile1', keycolors:[]},
+            {name:'Profile 2', value:'profile2', keycolors:[]},
+            {name:'Profile 3', value:'profile3', keycolors:[]},
+            {name:'Profile 4', value:'profile4', keycolors:[]},
+            {name:'Profile 5', value:'profile5', keycolors:[]},
+        ];
+    }
+    return profiles;
+}
+
+function saveProfiles() {
+    localStorage.setItem('profiles', JSON.stringify(profiles));
 }
