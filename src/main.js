@@ -1,10 +1,16 @@
 import Keyboard from 'simple-keyboard';
 import 'simple-keyboard/build/css/index.css';
+import './style.css';
+import './keyboard.css';
 
+//const defaultcolor = '#ffa500';
+const defaultcolor = '#ffa500';
+let currentcolor = defaultcolor;
 const picker = document.querySelector("#colorpicker");
-picker.value = '#ffa500';
-picker.addEventListener("change", updateKeys, false);
+picker.value = defaultcolor;
+picker.addEventListener("change", colorChange, false);
 
+let selectedkeys = [];
 let keyboards = [];
 
 let commonKeyboardOptions = {
@@ -46,7 +52,7 @@ const main = new Keyboard(".simple-keyboard-main", {
         "{tab}": "tab ⇥",
         "{backspace}": "backspace ⌫",
         "{enter}": "enter ↵",
-        "{capslock}": "caps lock ⇪",
+        "{capslock}": "caps ⇪",
         "{shiftleft}": "shift ⇧",
         "{shiftright}": "shift ⇧",
         "{controlleft}": "ctrl",
@@ -91,18 +97,37 @@ function onChange(input) {
 }
 
 function onKeyPress(keyboard, button) {
-    swapColor(keyboard, button, 'color1');
+    selectKey(keyboard, button);
 }
 
-function swapColor(keyboardName, button, className) {
+function selectKey(keyboardName, button) {
     const keyboard = keyboards.find(k => k.currentInstanceName == keyboardName);
     const el = keyboard.getButtonElement(button);
-    el.classList.toggle(className);
+    if(selectedkeys.includes(button)) {
+        selectedkeys = selectedkeys.filter(item => item !== button);
+        el.style.borderWidth = '0px';
+        el.style.color = 'black';
+        el.style.fontWeight = 'normal';
+    } else {
+        selectedkeys.push(button);
+        el.style.border = 'dotted';
+        el.style.borderWidth = '1px';
+        el.style.borderColor = 'black';
+        el.style.color = 'red';
+        el.style.fontWeight = 'bold';
+    }
+    el.classList.toggle('selected');
+}
+
+function colorChange(event) {
+    currentcolor = event.target.value;
+    updateKeys(event);
 }
 
 function updateKeys(event) {
-    document.querySelectorAll(".color1").forEach(p => {
-        p.style.background = event.target.value
-        p.style.color = "ffffff";
+    document.querySelectorAll(".selected").forEach(p => {
+//        if(p.style.color == 'red') {
+            p.style.background = currentcolor;
+//        }
     });
 }
