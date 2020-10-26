@@ -23,3 +23,7 @@ body {
     height: 20px;
     border-radius: 2px;
 }
+
+#settings {
+    margin-top: 2em;
+}

@@ -129,6 +129,26 @@ function colorChange(event) {
     saveOldColors();
     updateOldColors();
     updateKeys();
+
+    if(clearSelectionsOnChange()) {
+        clearSelections();
+    }
+}
+
+function clearSelectionsOnChange() {
+    return true;
+}
+
+function clearSelections() {
+    document.querySelectorAll(".selected").forEach(p => {
+        const button = p.dataset.skbtn;
+        selectedkeys = selectedkeys.filter(item => item !== button);
+        p.style.borderWidth = '0px';
+        p.style.color = 'black';
+        p.style.fontWeight = 'normal';
+        p.classList.remove('selected');             
+        console.log(selectedkeys);  
+    })
 }
 
 function updateKeys() {
@@ -150,6 +170,9 @@ function updateOldColors() {
             el.onclick = () => {
                 currentcolor = col;
                 updateKeys();
+                if(clearSelectionsOnChange()) {
+                    clearSelections();
+                }
             };
         }
     });
