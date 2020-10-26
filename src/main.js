@@ -7,7 +7,7 @@ import './keyboard.css';
 const defaultcolor = '#ffa500';
 let currentcolor = defaultcolor;
 
-let oldcolors = [];
+let oldcolors = loadOldColors();
 const picker = document.querySelector("#colorpicker");
 picker.value = defaultcolor;
 picker.addEventListener("change", colorChange, false);
@@ -126,6 +126,7 @@ function selectKey(keyboardName, button) {
 function colorChange(event) {
     currentcolor = event.target.value;
     oldcolors.push(currentcolor);
+    saveOldColors();
     updateOldColors();
     updateKeys();
 }
@@ -152,4 +153,13 @@ function updateOldColors() {
             };
         }
     });
+}
+
+function loadOldColors() {
+    let oldcols = localStorage.getItem('oldcolors').split(',');
+    return oldcols;
+}
+
+function saveOldColors() {
+    localStorage.setItem('oldcolors', oldcolors);
 }
