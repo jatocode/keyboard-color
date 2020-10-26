@@ -6,12 +6,16 @@ import './keyboard.css';
 //const defaultcolor = '#ffa500';
 const defaultcolor = '#ffa500';
 let currentcolor = defaultcolor;
+
+let oldcolors = [];
 const picker = document.querySelector("#colorpicker");
 picker.value = defaultcolor;
 picker.addEventListener("change", colorChange, false);
 
 let selectedkeys = [];
 let keyboards = [];
+
+updateOldColors();
 
 let commonKeyboardOptions = {
     onChange: input => onChange(input),
@@ -121,13 +125,31 @@ function selectKey(keyboardName, button) {
 
 function colorChange(event) {
     currentcolor = event.target.value;
-    updateKeys(event);
+    oldcolors.push(currentcolor);
+    updateOldColors();
+    updateKeys();
 }
 
-function updateKeys(event) {
+function updateKeys() {
     document.querySelectorAll(".selected").forEach(p => {
-//        if(p.style.color == 'red') {
-            p.style.background = currentcolor;
-//        }
+        p.style.background = currentcolor;
+    });
+}
+
+function updateOldColors() {
+    const MAXCOLORS = 10;
+    const colors = oldcolors.slice(Math.max(oldcolors.length - MAXCOLORS, 0))
+
+    colors.forEach((col,i) => {
+        if(i <= MAXCOLORS) {
+            const id = 'oldc' + (i + 1);
+            const el = document.getElementById(id);
+            el.style.backgroundColor = col;
+
+            el.onclick = () => {
+                currentcolor = col;
+                updateKeys();
+            };
+        }
     });
 }
