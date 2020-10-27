@@ -5,7 +5,7 @@ import './keyboard.css';
 
 //const defaultcolor = '#ffa500';
 const defaultcolor = '#ffa500';
-const clearcolor = 'white';
+const clearcolor = 'black';
 let currentcolor = defaultcolor;
 
 let oldcolors = loadOldColors();
@@ -32,7 +32,7 @@ clear.onclick = () => {
 
 let commonKeyboardOptions = {
     onChange: input => onChange(input),
-    theme: "simple-keyboard hg-theme-default hg-layout-default",
+    theme: "simple-keyboard hg-theme-default hg-layout-default myTheme1",
     physicalKeyboardHighlight: false,
     syncInstanceInputs: true,
     mergeDisplay: true,
