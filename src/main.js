@@ -33,7 +33,7 @@ clear.onclick = () => {
 let commonKeyboardOptions = {
     onChange: input => onChange(input),
     theme: "simple-keyboard hg-theme-default hg-layout-default",
-    physicalKeyboardHighlight: true,
+    physicalKeyboardHighlight: false,
     syncInstanceInputs: true,
     mergeDisplay: true,
     debug: true
@@ -107,6 +107,10 @@ const arrows = new Keyboard(".simple-keyboard-arrows", {
 keyboards.push(main);
 keyboards.push(control);
 keyboards.push(arrows);
+
+document.addEventListener('keydown', keycode => {
+    onKeyPress('simpleKeyboardMain', keycode.key);
+});
 
 function onChange(input) {
     document.querySelector(".input").value = input;
