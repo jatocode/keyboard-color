@@ -118,7 +118,17 @@ function onChange(input) {
 }
 
 function onKeyPress(keyboard, button) {
-    selectKey(keyboard, button);
+    if(paintOnSelect()) {
+        paintKey(keyboard, button);
+    } else {
+        selectKey(keyboard, button);
+    }
+}
+
+function paintKey(keyboardName, button) {
+    const keyboard = keyboards.find(k => k.currentInstanceName == keyboardName);
+    const el = keyboard.getButtonElement(button);
+    el.style.backgroundColor = currentcolor;
 }
 
 function selectKey(keyboardName, button) {
@@ -154,6 +164,11 @@ function colorChange(event) {
 
 function clearSelectionsOnChange() {
     return true;
+}
+
+function paintOnSelect() {
+    const el = document.getElementById('paint');
+    return el.checked;
 }
 
 function clearSelections() {
