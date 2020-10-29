@@ -14,5 +14,8 @@
     "keyboard": "0.0.1",
     "simple-keyboard": "^2.32.15",
     "src": "^1.1.2"
+  },
+  "devDependencies": {
+    "parcel": "^1.12.4"
   }
 }

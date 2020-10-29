@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime';
 import Keyboard from 'simple-keyboard';
 import 'simple-keyboard/build/css/index.css';
 import './style.css';
@@ -36,7 +37,7 @@ let commonKeyboardOptions = {
     physicalKeyboardHighlight: false,
     syncInstanceInputs: true,
     mergeDisplay: true,
-    debug: true
+    debug: false
 };
 
 const main = new Keyboard(".simple-keyboard-main", {
@@ -117,7 +118,17 @@ function onChange(input) {
    // console.log("Input changed", input);
 }
 
-function onKeyPress(keyboard, button) {
+async function onKeyPress(keyboard, button) {
+    if(directColoring()) {
+        var rgb = [1,3,5].map(function(o) {return currentcolor.slice(o,o+2)}).map(hex => parseInt(hex, 16)).join(',');
+        var data = {key: button.toUpperCase(), rgb: rgb};
+        console.log(data);
+
+        // Needs a https://github.com/YiZhang-Paul/Ducky_One_2_Engine backend (with singlekeymode added)
+        await postData('http://localhost:4000/api/v1/colorMode/singlekey', data);
+    //  handle errors, never try again
+    }
+
     if(paintOnSelect()) {
         paintKey(keyboard, button);
     } else {
@@ -164,6 +175,11 @@ function colorChange(event) {
 
 function clearSelectionsOnChange() {
     return true;
+}
+
+function directColoring() {
+    const el = document.getElementById('direct');
+    return el.checked;
 }
 
 function paintOnSelect() {
@@ -237,6 +253,20 @@ function changeProfile(name) {
         }
     })
 }
+
+async function postData(url = '', data = {}) {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      headers: {
+        'Content-Type': 'application/json'
+      },
+     body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+    return true;
+    // return response.json(); // parses JSON response into native JavaScript objects
+  }
 
 function saveProfile() {
     const profileSelect = document.getElementById('profileselect');
