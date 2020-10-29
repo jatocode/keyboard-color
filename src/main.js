@@ -217,6 +217,7 @@ function updateOldColors() {
             el.onclick = () => {
                 currentcolor = col;
                 updateKeys();
+                picker.value = col;
                 if(clearSelectionsOnChange()) {
                     clearSelections();
                 }
